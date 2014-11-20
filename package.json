@@ -1,0 +1,15 @@
+{
+  "name": "schnippelserver",
+  "description": "Schnippelbuch REST API for persisting schnippeldata",
+  "version": "0.1.0",
+  "author": {
+    "name": "Dominik Schlaepfer",
+    "url": "http://github.com/doemsche/"
+  },
+  "dependencies": {
+    "body-parser": "^1.9.2",
+    "express": "^4.10.2",
+    "jade": "^1.7.0",
+    "mongodb": "^1.4.22"
+  }
+}
