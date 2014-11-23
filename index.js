@@ -54,8 +54,9 @@ app.get('/:collection/:entity', function(req, res) { //I
 });
 
 app.post('/:collection', function(req, res) { //A
-
+    console.log(req.headers['x-crud-method']);
     var object = req.body;
+    object.action = req.headers['x-crud-method'];
     var collection = req.params.collection;
     collectionDriver.save(collection, object, function(err,docs) {
           if (err) { res.send(400, err); } 
