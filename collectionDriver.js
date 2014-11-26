@@ -41,7 +41,7 @@ CollectionDriver.prototype.get = function(collectionName, id, callback) { //A
 CollectionDriver.prototype.save = function(collectionName, obj, callback) {
 	//Since Unity3d does not Support DELETE AND PUT all updates will be handled 
 	//in a pseudy-CRUD implementation with the POST param
-	console.log(obj);	
+
 	switch(obj.action){
 		case "create":
 			console.log("action for create");
@@ -58,30 +58,64 @@ CollectionDriver.prototype.save = function(collectionName, obj, callback) {
 
 		case "update":
 			console.log("action for update");
-			// console.log(obj.)
-			var arr = obj.id.split('||');
-		        	var id = arr[0];
-		        	var v2 = arr[2];
-		        	console.log(arr);
-			this.getCollection(collectionName, function(error, the_collection) {
-		        if (error) {
-					console.log("err");
-		        	callback(error);
-		        }
-		        			
-		        else {
-		        	the_collection.update({_id: ObjectID(id)}, {"pos2d": v2}, function(){
-		        		if(err)callback(err);
-		        		else console.log(arguments);
-		        	});
-		            // obj._id = ObjectID(entityId); //A convert to a real obj id
-		            // obj.updated_at = new Date(); //B
-		            // the_collection.save(obj, function(error,doc) { //C
-		            //     if (error) callback(error);
-		            //     else callback(null, obj);
-		            // });
-		        }
-		    });
+			console.log(obj);
+			var arr = obj.updateData.split('||');
+        	var engineId = arr[0];
+        	var updateType = arr[1];
+        	var val = arr[2];
+        	switch(updateType){
+        		case "position":
+					this.getCollection(collectionName, function(error, the_collection) {
+						if (error) {console.log("err");}
+						else {
+								the_collection.update(
+									{Id: engineId},
+									{$set: {"Pos2d": val, "lastAction":"update-pos"}},
+									{upsert: false, multi:false}, 
+									function(err, doc){
+										console.log(err,doc);	
+									}
+								);
+							}
+						});
+        		break;
+        		case "size":
+					this.getCollection(collectionName, function(error, the_collection) {
+						if (error) {console.log("err");}
+						else {
+								the_collection.update(
+									{Id: engineId},
+									{$set: {"Size": val, "lastAction":"update-size"}},
+									{upsert: false, multi:false}, 
+									function(err, doc){
+										console.log(err,doc);	
+									}
+								);
+							}
+						});
+        		break;
+        		case "rotation":
+        			console.log("db update rotaion");
+					this.getCollection(collectionName, function(error, the_collection) {
+						if (error) {console.log("err");}
+						else {
+								the_collection.update(
+									{Id: engineId},
+									{$set: {"Rotation": val, "lastAction":"update-rotation"}},
+									{upsert: false, multi:false}, 
+									function(err, doc){
+										console.log(err,doc);	
+									}
+								);
+							}
+						});
+        		break;
+        		case "mirror":
+        		break;
+        		default: 
+        			console.log("header contains no valid update action. Valid actions for update are: postion, size, rotation, mirror");
+        	}
+
 		break;
 
 		case "delete":
@@ -89,12 +123,14 @@ CollectionDriver.prototype.save = function(collectionName, obj, callback) {
 		    this.getCollection(collectionName, function(error, the_collection) { //A
 		      if( error ) callback(error)
 		      else {
-		      	// _id: ObjectID("52b2f757b8116e1df2eb46ac")
-		      	the_collection.remove({_id: ObjectID(obj.id)}, function(err,o){console.log(arguments)});
-		        // obj.created_at = new Date(); //B
-		        // the_collection.insert(obj, function() { //C
-		        //   callback(null, obj);
-		        // });
+		      	// var x = the_collection.find({Id:"f80dc7a3-428a-4262-ba7c-77f83b5ac481"});
+		      	console.log(obj.engineId);
+		      	the_collection.remove(
+		      		{engineId:engineId},
+		      		{justOne: true},
+		      		function(err,o){
+		      			console.log(arguments)
+		      		});
 		      }
 		    });
 
@@ -106,32 +142,32 @@ CollectionDriver.prototype.save = function(collectionName, obj, callback) {
 };
 
 //update a specific object
-CollectionDriver.prototype.update = function(collectionName, obj, entityId, callback) {
-    this.getCollection(collectionName, function(error, the_collection) {
-        if (error) callback(error);
-        else {
-            obj._id = ObjectID(entityId); //A convert to a real obj id
-            obj.updated_at = new Date(); //B
-            the_collection.save(obj, function(error,doc) { //C
-                if (error) callback(error);
-                else callback(null, obj);
-            });
-        }
-    });
-};
+// CollectionDriver.prototype.update = function(collectionName, obj, entityId, callback) {
+//     this.getCollection(collectionName, function(error, the_collection) {
+//         if (error) callback(error);
+//         else {
+//             obj._id = ObjectID(entityId); //A convert to a real obj id
+//             obj.updated_at = new Date(); //B
+//             the_collection.save(obj, function(error,doc) { //C
+//                 if (error) callback(error);
+//                 else callback(null, obj);
+//             });
+//         }
+//     });
+// };
 
-//delete a specific object
-CollectionDriver.prototype.delete = function(collectionName, entityId, callback) {
-    this.getCollection(collectionName, function(error, the_collection) { //A
-        if (error) callback(error);
-        else {
-            the_collection.remove({'_id':ObjectID(entityId)}, function(error,doc) { //B
-                if (error) callback(error);
-                else callback(null, doc);
-            });
-        }
-    });
-};
+// //delete a specific object
+// CollectionDriver.prototype.delete = function(collectionName, entityId, callback) {
+//     this.getCollection(collectionName, function(error, the_collection) { //A
+//         if (error) callback(error);
+//         else {
+//             the_collection.remove({'_id':ObjectID(entityId)}, function(error,doc) { //B
+//                 if (error) callback(error);
+//                 else callback(null, doc);
+//             });
+//         }
+//     });
+// };
 
 
 
