@@ -7,7 +7,7 @@ var http = require('http'),
 	bodyParser = require('body-parser');
  
 var app = express();
-app.set('port', process.env.PORT || 3000); 
+app.set('port', process.env.PORT || 5000); 
 app.set('views', path.join(__dirname, 'views')); //A
 app.set('view engine', 'jade'); //B
 app.use(bodyParser.json());

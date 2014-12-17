@@ -41,7 +41,7 @@ CollectionDriver.prototype.get = function(collectionName, id, callback) { //A
 CollectionDriver.prototype.save = function(collectionName, obj, callback) {
 	//Since Unity3d does not Support DELETE AND PUT all updates will be handled 
 	//in a pseudy-CRUD implementation with the POST param
-
+	console.log(obj.action);
 	switch(obj.action){
 		case "create":
 			console.log("action for create");
