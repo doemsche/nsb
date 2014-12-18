@@ -45,6 +45,7 @@ CollectionDriver.prototype.save = function(collectionName, obj, callback) {
 	switch(obj.action){
 		case "create":
 			console.log("action for create");
+			console.log(obj);
 		    this.getCollection(collectionName, function(error, the_collection) { //A
 		      if( error ) callback(error)
 		      else {
@@ -95,7 +96,6 @@ CollectionDriver.prototype.save = function(collectionName, obj, callback) {
 						});
         		break;
         		case "rotation":
-        			console.log("db update rotaion");
 					this.getCollection(collectionName, function(error, the_collection) {
 						if (error) {console.log("err");}
 						else {

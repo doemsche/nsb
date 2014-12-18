@@ -13,7 +13,10 @@ app.set('view engine', 'jade'); //B
 app.use(bodyParser.json());
 
 
-var mongoHost = 'localHost'; //A
+var mongoHost = process.argv[2] || 'localHost'; //A
+if(mongoHost == 'localHost'){
+  console.log("WARNING: MongoHost-IP set to localHost! This will not work in a docker multi process env.");
+}
 var mongoPort = 27017; 
 var collectionDriver;
  
@@ -54,7 +57,7 @@ app.get('/:collection/:entity', function(req, res) { //I
 });
 
 app.post('/:collection', function(req, res) { //A
-    console.log(req.headers['x-crud-method']);
+    // console.log(req.headers['x-crud-method']);
     var object = req.body;
     object.action = req.headers['x-crud-method'];
     var collection = req.params.collection;
