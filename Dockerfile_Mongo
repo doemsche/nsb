@@ -1,0 +1,9 @@
+FROM ubuntu:14.04
+MAINTAINER Dominik Schläpfer "doemsche@gmx.ch"
+ENV REFRESHED_AT 2014-12-17
+
+RUN apt-get update && apt-get install -y mongodb
+RUN mkdir -p /data/db
+EXPOSE 27017
+
+ENTRYPOINT usr/bin/mongod

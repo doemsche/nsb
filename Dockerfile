@@ -16,6 +16,7 @@ WORKDIR /tmp/nodeSchnippelBuch
 
 RUN npm install
 
+ENTRYPOINT [ "nodejs", "index.js", "db" ]
+
 # From within docker container run:
-# docker run -t -i -p 5000:5000 --name nm doemsche/nodemongo /bin/bash
-# this step needs to be automated linked
+# docker run -ti --name nodemongo -p 5000:5000 --link <node_container_name>:db doemsche/nodemongo

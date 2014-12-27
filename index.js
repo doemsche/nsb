@@ -5,7 +5,7 @@ var http = require('http'),
 	Server = require('mongodb').Server,
 	CollectionDriver = require('./collectionDriver').CollectionDriver,
 	bodyParser = require('body-parser');
- 
+
 var app = express();
 app.set('port', process.env.PORT || 5000); 
 app.set('views', path.join(__dirname, 'views')); //A
